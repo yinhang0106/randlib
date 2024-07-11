@@ -1,4 +1,9 @@
 #include <cstdio>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+#include <iostream>
+#include <string>
 #include <random>
 
 struct xorshift32 {
@@ -49,11 +54,35 @@ struct wangshash {
 
 
 int main() {
-    std::mt19937 rng(1);
-    std::uniform_int_distribution<int> uni(0, 100); // random number between 0 and 100
-    for (int i = 0; i < 10; i++) {
-        int num = uni(rng);
-        printf("Random number: %d\n", num);
+    std::vector<float> gailv = {0.6f, 0.25f, 0.05f, 0.1f};
+    std::vector<float> gailv_scanned;
+    std::inclusive_scan(gailv.begin(), gailv.end(), std::back_inserter(gailv_scanned));
+    for (float i : gailv_scanned) {
+        printf("%f\n", i);
     }
+    std::vector<std::string> lian = {"mushi", "she", "enlosi", "wuya"};
+    std::mt19937 rng{std::random_device{}()};
+    std::uniform_real_distribution<float> unf(0.0f, 1.0f);
+    auto genlian = [&] () -> std::string {
+        float f = unf(rng);
+        auto it = std::lower_bound(gailv_scanned.begin(), gailv_scanned.end(), f);
+        if (it == gailv_scanned.end()) return "";
+        return lian[it - gailv_scanned.begin()];
+    };
+    std::cout << genlian() << '\n';
+    std::cout << genlian() << '\n';
+    std::cout << genlian() << '\n';
+    std::cout << genlian() << '\n';
+    std::cout << genlian() << '\n';
+    std::cout << genlian() << '\n';
+    std::cout << genlian() << '\n';
+    std::cout << genlian() << '\n';
+    std::cout << genlian() << '\n';
+    std::cout << genlian() << '\n';
+    std::cout << genlian() << '\n';
+    std::cout << genlian() << '\n';
+    std::cout << genlian() << '\n';
+    std::cout << genlian() << '\n';
+    std::cout << genlian() << '\n';
     return 0;
 }
