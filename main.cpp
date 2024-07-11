@@ -8,13 +8,14 @@
 
 struct xorshift32 {
 
-    uint32_t a;
-
     using result_type = uint32_t;
 
-    explicit xorshift32(uint32_t seed = 0) : a(static_cast<uint32_t>(seed + 1)) {}
+    result_type a;
 
-    constexpr uint32_t operator()() noexcept {
+
+    explicit xorshift32(result_type seed = 0) : a(static_cast<result_type>(seed + 1)) {}
+
+    constexpr result_type operator()() noexcept {
         auto x = a;
         x ^= x << 13;
         x ^= x >> 17;
@@ -23,21 +24,21 @@ struct xorshift32 {
         return a;
     }
 
-    static constexpr uint32_t min() noexcept { return 0; }
+    static constexpr result_type min() noexcept { return std::numeric_limits<result_type>::min(); }
 
-    static constexpr uint32_t max() noexcept { return UINT32_MAX; }
+    static constexpr result_type max() noexcept { return std::numeric_limits<result_type>::max(); }
 };
 
 struct wangshash {
 
-        uint32_t a;
-
         using result_type = uint32_t;
 
-        explicit wangshash(uint32_t seed = 0) : a(static_cast<uint32_t>(seed + 1)) {}
+        result_type a;
 
-        constexpr uint32_t operator()() noexcept {
-            uint32_t x = a;
+        explicit wangshash(result_type seed = 0) : a(static_cast<result_type>(seed + 1)) {}
+
+        constexpr result_type operator()() noexcept {
+            auto x = a;
             x = (x ^ 61) ^ (x >> 16);
             x *= 9;
             x = x ^ (x >> 4);
@@ -46,9 +47,9 @@ struct wangshash {
             return a = x;
         }
 
-        static constexpr uint32_t min() noexcept { return 0; }
+        static constexpr result_type min() noexcept { return std::numeric_limits<result_type>::min(); }
 
-        static constexpr uint32_t max() noexcept { return UINT32_MAX; }
+        static constexpr result_type max() noexcept { return std::numeric_limits<result_type>::max(); }
 
 };
 
@@ -61,7 +62,7 @@ int main() {
         printf("%f\n", i);
     }
     std::vector<std::string> lian = {"mushi", "she", "enlosi", "wuya"};
-    std::mt19937 rng{std::random_device{}()};
+    xorshift32 rng{std::random_device{}()};
     std::uniform_real_distribution<float> unf(0.0f, 1.0f);
     auto genlian = [&] () -> std::string {
         float f = unf(rng);
